@@ -27,6 +27,21 @@ proyecto/
 ├── package.json                    # Dependencias y scripts del proyecto
 └── README.md                       # Documentación del proyecto
 
+---
+## Inicializar el proyecto
+# 1. Inicializar el paquete de Node.js
+npm init -y
+
+# 2. Instalar Express (única tecnología externa permitida)
+npm install express
+
+-- Esto ya esta creado
+# 3. Crear la estructura de carpetas sugerida
+mkdir routes controllers utils
+
+# 4. Crear los archivos base
+touch app.js routes/incidencias.js controllers/incidenciasController.js utils/helpers.js README.md
+
 
 
 ---
