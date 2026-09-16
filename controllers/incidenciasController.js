@@ -108,6 +108,13 @@ const cambiarEstadoIncidencia = (req, res) => {
     }
 
     // Buscamos la incidencia por medio del id con find()
+    const incidencia = incidencias.find((item) => item.id === id);
+
+    // Validacion si no fue encontrada
+    if (!incidencia) {
+        return res.status(404).json({ mensaje: "Incidencia no encontrada" })
+    }
+
     const estadoLimpio = limpiarTexto(estado).toLowerCase();
     let nuevoEstado = "";
 
@@ -165,7 +172,7 @@ const eliminarIncidencia = (req, res) => {
 // Retorna: totalIncidencias, pendientes, enProceso, resueltas, canceladas */
 const obtenerEstadisticas = (req, res) => {
     // Calculamos sin variables contadoras manuales usando reduce()
-    const estadistica = incidencia.reduce(
+    const estadistica = incidencias.reduce(
         (acumulador, actual) => {
             acumulador.totalIncidencias++;
             switch (actual.estado) {
@@ -201,7 +208,36 @@ const obtenerEstadisticas = (req, res) => {
 // GET / Estadisticas/:id/clasificacion
 // Parametros: id, clasificacions */
 const obtenerClasificacion = (req, res) => {
-    res.status(501).json({ mensaje: "Por implementar" });
+    const id = Number(req.params.id);
+    // Buscamos la incidencia por medio del id con find()
+    const incidencia = incidencias.find((item) => item.id === id);
+
+    // Validacion si no fue encontrada
+    if (!incidencia) {
+        return res.status(404).json({ mensaje: "Incidencia no encontrada" })
+    }
+
+    let clasificacion = "";
+    // Mapeo de prioridades a clasificaciones
+    switch (incidencia.prioridad) {
+        case "Alta":
+            clasificacion = "Crítica";
+            break;
+        case "Media":
+            clasificacion = "Importante";
+            break;
+        case "Baja":
+            clasificacion = "Normal";
+            break;
+            default:
+                clasificacion = "No clasificada";
+    }
+
+    // FORMATO DE SALIDA
+    return res.status(200).json({
+        id: incidencia.id,
+        clasidificacion: clasificacion
+    });
 };
 
 // Exportamos todos los métodos para ser consumidos en el archivo de rutas[cite: 1]
