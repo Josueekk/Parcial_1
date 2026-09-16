@@ -14,10 +14,10 @@ let idContador = 1;
  Recibe: Empleado, Area, Descripcion, Prioridad */
 const crearIncidencia = (req, res) => {
     // Obtenemos los datos
-    const { Empleado, area, descripcion, prioridad } = req.body;
+    const { empleado, area, descripcion, prioridad } = req.body;
 
     // Validamos los campos
-    if (!Empleado || !area || !descripcion || !prioridad) {
+    if (!empleado || !area || !descripcion || !prioridad) {
         return res.status(400).json({ mensaje: "Todos los campos son obligatorios." });
     }
 
@@ -77,14 +77,27 @@ const obtenerIncidencias = (req, res) => {
 // GET / Indicidencias:id
 // Parametro: id(numerico) */
 const obtenerIncidenciaPorId = (req, res) => {
-    res.status(501).json({ mensaje: "Por implementar" });
+
+    // Extraemos el parametro de la URL
+    const id = Number(req.params.id);
+    // Buscamos el elemento con el metodo find()
+    const incidencia = incidencias.find((item) => item.id === id);
+
+    // Validacion si no fue encontrada
+    if (!incidencia) {
+        // Mensaje de error
+        return res.status(404).json({ mensaje: "Incidencia no encontrada" })
+    }
+
+    // Retornamos las incidencias
+    return res.status(200).json(incidencia);
 };
 
 /* -- ENDPOINT 4: Cambiar Estado de incidencia -- //
 // PUT /Incidencias/:id/estado
 // Parametro: estado */
 const cambiarEstadoIncidencia = (req, res) => {
-    res.status(501).json({ mensaje: "Por implementar" });
+    
 };
 
 /* -- ENDPOINT 5: Elimar Incidencia -- //
@@ -114,7 +127,7 @@ module.exports = {
     obtenerIncidencias,
     obtenerIncidenciaPorId,
     cambiarEstadoIncidencia,
-    eliminarIncidencia,
+    //eliminarIncidencia,
     obtenerEstadisticas,
     obtenerClasificacion
 };
