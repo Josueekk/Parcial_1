@@ -2,9 +2,9 @@
   "name": "parcial_1",
   "version": "1.0.0",
   "description": "API REST desarrollada con Node.js y Express para la administración de solicitudes de soporte técnico y reporte de incidencias internas dentro de la empresa.",
-  "main": "app.js",
+ "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
