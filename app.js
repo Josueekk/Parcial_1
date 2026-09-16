@@ -9,6 +9,9 @@ const PORT = 3000;
 // parsear bodies en formato JSON
 app.use(express.json());
 
+// Rutas de la API
+app.use('/', incidenciasRoutes);
+
 // Validacion de ruta no encontrada (404)
 app.use((req, res) => {
     res.status(404).json({ mensaje: "Ruta no encontrada" });
