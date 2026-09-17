@@ -7,8 +7,6 @@ const incidencias = [];
 let idContador = 1;
 
 
-
-
 // ===== ENDPOINT ===== //
 
 /* -- ENDPOINT 1: Registro de incidencias -- //
@@ -69,9 +67,13 @@ const obtenerIncidencias = (req, res) => {
 const obtenerIncidenciaPorId = (req, res) => {
 
     // Extraemos el parametro de la URL y lo convertimos
-    const id = Number(req.params.id);
+
+    //* Para cambiar el metodo de busqueda cambiamos eliminamos Number(req.params.id) y agregamos el parametro que vayamos a buscar
+    //en caso de cambiar el nombre de la constante, tambien hay que cambiar ese nombre en la ruta de ObtenerporId y hay que cambiarlo 
+    //en incidencias.find tambien
+    const id = Number(req.params.id); 
     // Buscamos el elemento con el metodo find()
-    const incidencia = incidencias.find((item) => item.id === id);
+    const incidencia = incidencias.find((item) => item.id === id); //aqui cambiamos el item.id por el parametro a buscar
 
     // Validacion si no fue encontrada
     if (!incidencia) {
@@ -153,6 +155,7 @@ const obtenerEstadisticas = (req, res) => {
     // Calculamos sin variables contadoras manuales usando reduce()
     const estadistica = incidencias.reduce(
         (acumulador, actual) => {
+            //El callback que recibe la funcion reduce. Indica qué queremos que ocurra con cada elemento del arreglo
             acumulador.totalIncidencias++;
             switch (actual.estado) {
                 case "Pendiente":
@@ -170,6 +173,7 @@ const obtenerEstadisticas = (req, res) => {
             }
             return acumulador;
         },
+        //valor actual que recibe la funcion reduce. Punto de partida
         {
             //Estadistica
             totalIncidencias: 0,
