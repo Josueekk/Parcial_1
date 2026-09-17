@@ -1,10 +1,12 @@
-const { limpiarTexto } = require('../utils/helpers');
+const { limpiarTexto, verificarPrioridad, verificarEstadoIncidencia, verificarClasificacionIncidencia } = require('../utils/helpers');
 // Definimos los metodos 
 
 // Arreglo en memoria obligatorio para persistencia
 const incidencias = [];
 // Contador para asignar los identificadores numericos unicos
 let idContador = 1;
+
+
 
 
 // ===== ENDPOINT ===== //
@@ -25,28 +27,16 @@ const crearIncidencia = (req, res) => {
     const empLimpio = limpiarTexto(empleado);
     const areaLimpia = limpiarTexto(area);
     const descLimpia = limpiarTexto(descripcion);
-    const prioLimpia = limpiarTexto(prioridad);
+    
 
-    if (!empLimpio || !areaLimpia || !descLimpia || !prioLimpia) {
+    if (!empLimpio || !areaLimpia || !descLimpia) {
         return res.status(400).json({ mensaje: "No se permiten campos con cadenas vacías" });
     }
 
-    // Validación de prioridad permitida usando toLowerCase()[cite: 1]
-    const prioridadNormalizada = prioLimpia.toLowerCase();
-    let prioridadValida = "";
-
-    switch (prioridadNormalizada) {
-        case "alta":
-            prioridadValida = "Alta";
-            break;
-        case "media":
-            prioridadValida = "Media";
-            break;
-        case "baja":
-            prioridadValida = "Baja";
-            break;
-        default:
-            return res.status(400).json({ mensaje: "Prioridad no válida. Debe ser Alta, Media o Baja" });
+    const prioridadValida = verificarPrioridad(prioridad)
+    // Validación de prioridad por medio de helper
+    if (!prioridadValida) {
+        return res.status(400).json({ mensaje: "Prioridad no válida. Debe ser Alta, Media o Baja" });
     }
 
     // Creación de la nueva incidencia con estado inicial Pendiente
@@ -115,30 +105,19 @@ const cambiarEstadoIncidencia = (req, res) => {
         return res.status(404).json({ mensaje: "Incidencia no encontrada" })
     }
 
-    const estadoLimpio = limpiarTexto(estado).toLowerCase();
-    let nuevoEstado = "";
+    const estadoValidado = verificarEstadoIncidencia(estado);
+    
 
-    // Validación de estados
-    switch (estadoLimpio) {
-        case "pendiente":
-            nuevoEstado = "Pendiente";
-            break;
-        case "en proceso":
-            nuevoEstado = "En Proceso";
-            break;
-        case "resuelta":
-            nuevoEstado = "Resuelta";
-            break;
-        case "cancelada":
-            nuevoEstado = "Cancelada";
-            break;
-        default:
-            return res.status(400).json({
+    if (!estadoValidado) {
+        return res.status(400).json({
                 mensaje: "Estado no válido. Opciones permitidas: Pendiente, En Proceso, Resuelta, Cancelada"
             });
     }
+
+    // Validación de estados
+    
     // Mandamos el nuevo estado
-    incidencia.estado = nuevoEstado;
+    incidencia.estado = estadoValidado;
 
     // Mensaje de exito
     return res.status(200).json({
@@ -217,21 +196,9 @@ const obtenerClasificacion = (req, res) => {
         return res.status(404).json({ mensaje: "Incidencia no encontrada" })
     }
 
-    let clasificacion = "";
-    // Mapeo de prioridades a clasificaciones
-    switch (incidencia.prioridad) {
-        case "Alta":
-            clasificacion = "Crítica";
-            break;
-        case "Media":
-            clasificacion = "Importante";
-            break;
-        case "Baja":
-            clasificacion = "Normal";
-            break;
-            default:
-                clasificacion = "No clasificada";
-    }
+    const clasificacion = verificarClasificacionIncidencia(incidencia.prioridad)
+    
+    
 
     // FORMATO DE SALIDA
     return res.status(200).json({
