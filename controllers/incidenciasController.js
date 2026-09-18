@@ -9,6 +9,13 @@ let idContador = 1;
 
 // ===== ENDPOINT ===== //
 
+//Incidencia si nos piden obtenerlo por medio de query
+
+//const crearIncidencia = (req, res) => {
+    // En lugar de req.body, extraemos desde req.query
+   // const { empleado, area, descripcion, prioridad } = req.query;
+
+
 /* -- ENDPOINT 1: Registro de incidencias -- //
 // POST /Incidencias
  Recibe: Empleado, Area, Descripcion, Prioridad */
@@ -51,7 +58,7 @@ const crearIncidencia = (req, res) => {
     incidencias.push(nuevaIncidencia);
 
     // Mensaje de e
-    return res.status(201).json({ mensaje: "Incidencia registrada correctamente" });
+    return res.status(201).json({ mensaje: "Incidencia registrada correctamente" }); //${nuevaIncidencia.dato}
 };
 
 /* -- ENDPOINT 2: Listar de incidencias -- //
@@ -75,11 +82,10 @@ const obtenerIncidenciaPorId = (req, res) => {
     // Buscamos el elemento con el metodo find()
     const incidencia = incidencias.find((item) => item.id === id); //aqui cambiamos el item.id por el parametro a buscar
 
-
     //buscar por nombre
-    //const nombreB = req.params.empleado; 
-    //const nombre = nombreB.toLowerCase().trim();
-    //const incidencia = incidencias.filter((item) => {return item.empleado.toLowerCase.includes(nombre)});
+    // const empleado = limpiarTexto(req.params.empleado);
+    // const incidencia = incidencias.filter((item) => item.empleado.toLowerCase() === empleado.toLowerCase());
+    // if (resultados.length === 0) 
 
     // Validacion si no fue encontrada
     if (!incidencia) {
