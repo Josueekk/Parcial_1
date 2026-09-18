@@ -90,3 +90,10 @@ git checkout main
 git pull origin main
 git merge develop
 git push origin main
+
+
+### Instalar el nodemon
+npm install --save-dev nodemon
+
+### Corremos el programa con
+npm run dev
