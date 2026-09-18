@@ -21,7 +21,7 @@ const crearIncidencia = (req, res) => {
         return res.status(400).json({ mensaje: "Todos los campos son obligatorios." });
     }
 
-    // Limpieza de espacios y validación de cadenas vacías con trim()[cite: 1]
+    // Limpieza de espacios y validación de cadenas vacías con trim()
     const empLimpio = limpiarTexto(empleado);
     const areaLimpia = limpiarTexto(area);
     const descLimpia = limpiarTexto(descripcion);
@@ -68,12 +68,18 @@ const obtenerIncidenciaPorId = (req, res) => {
 
     // Extraemos el parametro de la URL y lo convertimos
 
-    //* Para cambiar el metodo de busqueda cambiamos eliminamos Number(req.params.id) y agregamos el parametro que vayamos a buscar
+    //* Para cambiar el metodo de busqueda cambiamos Number(req.params.id) y agregamos el parametro que vayamos a buscar
     //en caso de cambiar el nombre de la constante, tambien hay que cambiar ese nombre en la ruta de ObtenerporId y hay que cambiarlo 
     //en incidencias.find tambien
     const id = Number(req.params.id); 
     // Buscamos el elemento con el metodo find()
     const incidencia = incidencias.find((item) => item.id === id); //aqui cambiamos el item.id por el parametro a buscar
+
+
+    //buscar por nombre
+    //const nombreB = req.params.empleado; 
+    //const nombre = nombreB.toLowerCase().trim();
+    //const incidencia = incidencias.filter((item) => {return item.empleado.toLowerCase.includes(nombre)});
 
     // Validacion si no fue encontrada
     if (!incidencia) {
@@ -203,15 +209,15 @@ const obtenerClasificacion = (req, res) => {
     const clasificacion = verificarClasificacionIncidencia(incidencia.prioridad)
     
     
-
+    //Si piden clasificacion como mayusculas agregar toUpperCase() a la clasificacion
     // FORMATO DE SALIDA
     return res.status(200).json({
         id: incidencia.id,
-        clasidificacion: clasificacion
+        clasificacion: clasificacion 
     });
 };
 
-// Exportamos todos los métodos para ser consumidos en el archivo de rutas[cite: 1]
+// Exportamos todos los métodos para ser consumidos en el archivo de rutas
 module.exports = {
     crearIncidencia,
     obtenerIncidencias,
